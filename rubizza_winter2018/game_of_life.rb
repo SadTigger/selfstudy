@@ -22,11 +22,11 @@ class Cell
     !@live
   end
 
-  def live
+  def live!
     @live = true
   end
 
-  def dead
+  def dead!
     @live = false
   end
 
@@ -59,15 +59,15 @@ class Universe
     if @universe[cell_x][cell_y].alive?
       case
       when count == 2 || count == 3
-        @universe[cell_x][cell_y].live
+        @universe[cell_x][cell_y].live!
       when count < 2 || count > 3
-        @universe[cell_x][cell_y].dead
+        @universe[cell_x][cell_y].dead!
       else
         puts 'Error'
         exit
       end
     elsif @universe[cell_x][cell_y].dead?
-      @universe[cell_x][cell_y].live if count == 3
+      @universe[cell_x][cell_y].live! if count == 3
     else
       puts "Dead End"
     end

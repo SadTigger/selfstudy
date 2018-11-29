@@ -31,14 +31,14 @@ class Cell
   end
 
   def show_status
-    @live
+    @live ? "*" : ' '
   end
 end
 
 # class Universe
 class Universe
   def initialize
-    @universe = Array.new(6) { Array.new(6) { Cell.new } }
+    @universe = Array.new(20) { Array.new(20) { Cell.new } }
   end
 
   def array_border_check
@@ -46,8 +46,8 @@ class Universe
 
   def check(cell_x, cell_y)
     count = 0
-    cell_x = -1 if cell_x >= @universe.size || cell_x + 1 >= @universe.size
-    cell_y = -1 if cell_y >= @universe[0].size || cell_y + 1 >= @universe[0].size
+    cell_x = -1 if cell_x >= @universe.size - 1  #|| cell_x + 1 >= @universe.size
+    cell_y = -1 if cell_y >= @universe[0].size - 1 #|| cell_y + 1 >= @universe[0].size
     @universe[cell_x - 1][cell_y - 1].alive? ? count += 1 : count
     @universe[cell_x][cell_y - 1].alive? ? count += 1 : count
     @universe[cell_x + 1][cell_y - 1].alive? ? count += 1 : count
@@ -64,9 +64,12 @@ class Universe
         @universe[cell_x][cell_y].dead
       else
         puts 'Error'
+        exit
       end
     elsif @universe[cell_x][cell_y].dead?
       @universe[cell_x][cell_y].live if count == 3
+    else
+      puts "Dead End"
     end
   end
 

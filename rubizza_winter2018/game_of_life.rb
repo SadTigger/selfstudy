@@ -46,8 +46,8 @@ class Universe
 
   def check(cell_x, cell_y)
     count = 0
-    cell_x = -1 if cell_x >= @universe.size - 1  #|| cell_x + 1 >= @universe.size
-    cell_y = -1 if cell_y >= @universe[0].size - 1 #|| cell_y + 1 >= @universe[0].size
+    cell_x = -1 if cell_x >= @universe.size - 1
+    cell_y = -1 if cell_y >= @universe[0].size - 1
     @universe[cell_x - 1][cell_y - 1].alive? ? count += 1 : count
     @universe[cell_x][cell_y - 1].alive? ? count += 1 : count
     @universe[cell_x + 1][cell_y - 1].alive? ? count += 1 : count

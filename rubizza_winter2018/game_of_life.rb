@@ -31,17 +31,14 @@ class Cell
   end
 
   def show_status
-    @live ? "*" : ' '
+    @live ? '*' : ' '
   end
 end
 
 # class Universe
 class Universe
   def initialize
-    @universe = Array.new(20) { Array.new(20) { Cell.new } }
-  end
-
-  def array_border_check
+    @universe = Array.new(40) { Array.new(20) { Cell.new } }
   end
 
   def check(cell_x, cell_y)
@@ -57,10 +54,9 @@ class Universe
     @universe[cell_x][cell_y + 1].alive? ? count += 1 : count
     @universe[cell_x + 1][cell_y + 1].alive? ? count += 1 : count
     if @universe[cell_x][cell_y].alive?
-      case
-      when count == 2 || count == 3
+      if [2, 3].include?(count)
         @universe[cell_x][cell_y].live!
-      when count < 2 || count > 3
+      elsif count < 2 || count > 3
         @universe[cell_x][cell_y].dead!
       else
         puts 'Error'
@@ -69,28 +65,27 @@ class Universe
     elsif @universe[cell_x][cell_y].dead?
       @universe[cell_x][cell_y].live! if count == 3
     else
-      puts "Dead End"
+      puts 'Dead End'
     end
   end
 
   def neighborhood
     @universe.each do |row|
       row.each do |col|
-        check(@universe.index(row),row.index(col))
+        check(@universe.index(row), row.index(col))
       end
     end
-    self.show
+    show
   end
 
   def show
-    @universe.map { |row| p row.map { |el| el.show_status } }
+    @universe.map { |row| p row.map(&:show_status) }
   end
 end
 
 u = Universe.new
-#p u.show
-while true
-  sleep 1
-  system("clear")
+loop do
+  sleep 0.45
+  system('clear')
   u.neighborhood
 end

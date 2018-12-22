@@ -14,41 +14,20 @@ mechanize = Mechanize.new
 
 page = mechanize.get('https://companies.dev.by/')
 
-#
-array = []
-# page.search('table#tablesort.companies tr').each do |el|
-#   # next if el.search('td').nil?
-#   array << el.search('td')
-# end
+test_link = page.link_with(href: '/itechart-group').click
 
-#
-# array.each do |el|
-#   p el
-# end
-
-
-
-# company_name = []
-#
-# array.each do |el|
-#   # p "#{el[0]} el1 -- #{el[1]} el2 -- #{el[2]} el3-- #{el[3]} el4-- #{el[4]} el5-- #{el[5]}"
-#   p '*' * 11
-#   p el.at('a')
-#   p ' '
-#   p el.search('a')
-#   p ''* 11
-#   # p el.search('.t-left')
-#   # p '*' * 11
-#   # company_name << el[0]
-# end
-
-link = mechanize.page.link_with(href: '/yandex').click
+def get_all_links(page)
+  page.xpath('//tbody/tr/td[1]/a')
+end
 
 def skills(link)
   p link.search('div.left').at('.full-name').children.xpath('text()').to_s.strip.split(', ')
 end
 
-# search('div.data-info')
+def tech_skills(link, skill)
+  link.search('div.description.truncate-description').at('div.text').text.include?(skill)
+end
+
 def company_name(link)
   p link.search('div.left').at('h1').children.text
 end
@@ -64,19 +43,21 @@ end
 def contacts(link)
   contact = []
   link.search('div.sidebar-for-companies').each do |line|
-    # contact <<  [line.at('.url'), line.at('.street-address')]
     puts "#{line.at('h2').text}:"
     puts "email #{line.at('.url').children.text}"
   end
-  # p contact
 end
 
-company_name(link)
-skills(link)
-employee_info(link)
-contacts(link)
+def check_links(page)
+  puts "input skill for check"
+  input = gets.chomp
+  result = []
+  get_all_links(page).first(100).each do |link|
+    a = page.link_with(href: "#{link['href']}").click
+    next if !tech_skills(a, input)
+    result << company_name(a)
+  end
+  result.empty? ? puts("There is no companies.") : result
+end
 
-
-# page.links.each do |link|
-#   # puts link.text
-# end
+check_links(page)

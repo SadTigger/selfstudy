@@ -44,6 +44,10 @@ array = []
 
 link = mechanize.page.link_with(href: '/yandex').click
 
+def skills(link)
+  p link.search('div.left').at('.full-name').children.xpath('text()').to_s.strip.split(', ')
+end
+
 # search('div.data-info')
 def company_name(link)
   p link.search('div.left').at('h1').children.text
@@ -68,10 +72,11 @@ def contacts(link)
 end
 
 company_name(link)
+skills(link)
 employee_info(link)
 contacts(link)
 
 
-page.links.each do |link|
-  # puts link.text
-end
+# page.links.each do |link|
+#   # puts link.text
+# end

@@ -1,0 +1,26 @@
+p#notice = notice
+
+p
+  strong Title:
+  = @post.title
+p
+  strong Content:
+  = @post.content
+p
+  strong User:
+  = @post.user.email
+
+p Comments:
+- @post.comments.each do |comment|
+  p = comment.body
+  p = "written by #{comment.user.email}"
+
+hr
+
+= form_tag action: 'comment', id: @post
+= text_area 'comment', 'body'
+= submit_tag 'Comment!'
+
+=> link_to 'Edit', edit_post_path(@post)
+'|
+=< link_to 'Back', posts_path
